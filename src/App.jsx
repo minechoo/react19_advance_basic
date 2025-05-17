@@ -1,7 +1,36 @@
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+
 export default function App() {
+  const [Wid, setWid] = useState(0);
+  const refDiv = useRef(null);
+
+  useEffect(() => {
+    //상태값 변경을 통해서 리액트가 랜더링되고 화면에 페인트된후 호출됨
+    if (refDiv.current) {
+      const widSize = refDiv.current.getBoundingClientRect().width;
+      console.log("useEffect", widSize);
+      setWid(widSize);
+    }
+  }, []);
+
+  useLayoutEffect(() => {
+    //상태값 변경을 통해서 리액트가 렌더링되고 화면에 페인트되기 직전에 호출됨
+    if (refDiv.current) {
+      const widSize = refDiv.current.getBoundingClientRect().width;
+      console.log("useLayoutEffect", widSize);
+      setWid(widSize);
+    }
+  }, []);
+
   return (
     <>
-      <h1>useLayoutEffect</h1>
+      <div
+        ref={refDiv}
+        style={{ width: "50%", backgroundColor: "orange", padding: "50px" }}
+      >
+        해당 요소의 너비와 높이는 가변형
+      </div>
+      <p>{Wid}</p>
     </>
   );
 }
