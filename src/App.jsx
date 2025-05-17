@@ -1,7 +1,28 @@
+import { useState } from "react";
+
 export default function App() {
+  const [InputValue, setInputValue] = useState("");
+  const [MovieData, setMovieData] = useState([]);
+
+  //아래와 같이 복수개의 상태값을 동시에 변경처리할때 로직이 무겁고 시간이 오래걸리는 상태변경로직이 같이 있으면
+  //우선순위를 구분하지 않았을때 긴급하게 처리되야 되는 상태 업데이트까지 같이 늦어지면서 사용성에 악역향 발생
+  const handleChange = (e) => {
+    //실제 input에 반영되는 긴급 상태값
+    setInputValue(e.target.value);
+
+    const newData = [];
+    for (let i = 0; i < 10000000; i++) {
+      newData.push(i);
+    }
+    // 실시간 반영할 필요가 없는 비 긴급 상태값
+    setMovieData(newData);
+  };
+
   return (
     <>
       <h1>useTransition</h1>
+
+      <input type="text" value={InputValue} onChange={handleChange} />
     </>
   );
 }
@@ -19,6 +40,4 @@ export default function App() {
   위와 같은 순서의 작업을 할때 상태값이 2개 필요 (input출력용 상태값, 수행완료된 서버데이터를 화면에 출력용 상태값)
   -input용 상태값은 로직처리가 무겁지 않고 화면에 바로바로 반영해야 되는 데이터 (Urgent Update) 긴급 변경필요 데이터
   -서버 데이터 출력용 상태값은 로직처리가 무겁과 화면에 바로바로 출력할 필요가 없는 데이터 (Not Urgent Update) 비긴급 변경필요 데이터
-
-
 */
